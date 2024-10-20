@@ -105,11 +105,11 @@ public class ResponseMessage {
                 .build();
     }
 
-    public static ResponseMessage success(String message, int pageNumber, int pageSize, List<String> data) {
+    public static ResponseMessage success(String path, int pageNumber, int pageSize, List<String> data) {
         return new Builder()
                 .status(STATUS_SUCCESS)
                 .messageCode(SUCCESS_CODE)
-                .message(message)
+                .path(path)
                 .httpStatusCode(HttpStatus.OK.value())
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)

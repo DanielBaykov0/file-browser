@@ -2,6 +2,11 @@ package baykov.daniel.logs.controller;
 
 import baykov.daniel.logs.model.ResponseMessage;
 import baykov.daniel.logs.service.FileBrowserService;
+import baykov.daniel.logs.swagger.DownloadFileOpenApi;
+import baykov.daniel.logs.swagger.IsDirectoryOpenApi;
+import baykov.daniel.logs.swagger.ListFilesAndDirectoriesOpenApi;
+import baykov.daniel.logs.swagger.ReadFileContentOpenAPi;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -20,6 +26,7 @@ import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequestMapping("/file-browser")
+@Tag(name = "File Operations", description = "Rest APIs for listing, reading, and downloading files")
 public class FileBrowserController {
 
     private final FileBrowserService fileBrowserService;
@@ -28,12 +35,14 @@ public class FileBrowserController {
         this.fileBrowserService = fileBrowserService;
     }
 
+    @ListFilesAndDirectoriesOpenApi
     @GetMapping("/list")
     public ResponseEntity<ResponseMessage> listFilesAndDirectories(
-            @RequestParam(required = false) String path) {
+            @RequestParam(required = false) String path) throws FileNotFoundException {
         return ResponseEntity.ok(fileBrowserService.listFilesAndDirectories(path));
     }
 
+    @ReadFileContentOpenAPi
     @GetMapping("/read")
     public ResponseEntity<ResponseMessage> readFileContent(
             @RequestParam(required = false) String path,
@@ -42,11 +51,13 @@ public class FileBrowserController {
         return ResponseEntity.ok(fileBrowserService.readFileContent(path, pageNumber, pageSize));
     }
 
+    @IsDirectoryOpenApi
     @GetMapping("/is-directory")
     public ResponseEntity<ResponseMessage> isDirectory(@RequestParam(required = false) String path) throws NoSuchFileException {
         return ResponseEntity.ok(fileBrowserService.isDirectory(path));
     }
 
+    @DownloadFileOpenApi
     @GetMapping("/download")
     public ResponseEntity<Resource> downloadFile(@RequestParam String baseDir, @RequestParam String filePath) throws IOException {
         Resource file = fileBrowserService.downloadFile(baseDir, filePath);

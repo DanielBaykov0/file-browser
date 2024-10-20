@@ -1,10 +1,10 @@
 package baykov.daniel.logs;
 
-import baykov.daniel.logs.swagger.OpenApiMain;
+import baykov.daniel.logs.swagger.MainOpenApi;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@OpenApiMain
+@MainOpenApi
 @SpringBootApplication
 public class LogsApplication {
 

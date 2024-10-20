@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IOException.class)
     public ResponseEntity<ResponseMessage> handleIOException(IOException ex) {
         ResponseMessage error = ResponseMessage.error(
-                "Error reading file or directory: ",
+                "Error reading file or directory",
                 ex.getMessage(),
                 HttpStatus.BAD_REQUEST.value()
         );

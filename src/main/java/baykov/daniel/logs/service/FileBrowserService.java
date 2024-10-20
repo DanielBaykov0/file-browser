@@ -25,7 +25,7 @@ public class FileBrowserService {
     @Value("${app.root.path}")
     private String rootPath;
 
-    public ResponseMessage listFilesAndDirectories(String relativePath) {
+    public ResponseMessage listFilesAndDirectories(String relativePath) throws FileNotFoundException {
         Path absolutePath = getAbsolutePath(relativePath);
 
         File folder = absolutePath.toFile();
@@ -38,6 +38,8 @@ public class FileBrowserService {
                     filesAndDirectories.add(file.getName() + (file.isDirectory() ? FileSystems.getDefault().getSeparator() : ""));
                 }
             }
+        } else {
+            throw new IllegalArgumentException("The specified path does not exist: " + absolutePath);
         }
 
         return ResponseMessage.success(
@@ -73,7 +75,7 @@ public class FileBrowserService {
                 }
             }
         } catch (IOException e) {
-            throw new IOException();
+            throw new IOException(absolutePath.toString());
         }
 
         return ResponseMessage.success(
